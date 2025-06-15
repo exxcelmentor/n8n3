@@ -1,0 +1,4 @@
+
+requests
+python-dotenv
+fal-client==0.7.0

@@ -1,0 +1,7 @@
+moviepy
+requests
+python-dotenv
+pyttsx3
+gTTS
+Pillow
+imageio-ffmpeg
