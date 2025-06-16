@@ -5,3 +5,6 @@
 /tts_gen/venv/
 /main_driver/venv/
 /combined/venv/
+
+
+/creds/service_account.json
