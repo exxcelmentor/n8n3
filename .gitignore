@@ -3,4 +3,12 @@
 /image_gen/venv/
 /video_gen/venv/
 /tts_gen/venv/
+<<<<<<< HEAD
 /main_driver/venv/
+=======
+/main_driver/venv/
+/combined/venv/
+
+
+/creds/service_account.json
+>>>>>>> origin/main
