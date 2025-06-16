@@ -1,0 +1,12 @@
+# Combined requirements for the entire pipeline
+fal-client==0.7.0
+requests
+python-dotenv
+TTS==0.22.0
+torch>=1.10.0
+moviepy
+gspread
+pyttsx3
+gTTS
+Pillow
+imageio-ffmpeg
