@@ -18,6 +18,11 @@ from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip
 from moviepy.video.fx.resize import resize
 from moviepy.video.fx.fadein import fadein
 from moviepy.video.fx.fadeout import fadeout
+from PIL import Image
+import numpy as np
+
+# os.environ["IMAGEMAGICK_BINARY"] = "/Users/anilvyas/Downloads/ImageMagick-7.0.10/magick"
+os.environ["IMAGETO_FEMPEG_EXE"] = r"/Users/anilvyas/ImageMagick-7.0.10/bin/convert"
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 OUTPUT_DIR = BASE_DIR / "output"
@@ -95,11 +100,20 @@ def generate_video(row_id: str, caption: str | None = None) -> Path:
     audio = AudioFileClip(str(aud))
     duration = audio.duration * 1.05
 
+    # Create a custom resize function that uses LANCZOS instead of ANTIALIAS
+    def custom_resize(clip, factor_func):
+        def resize_frame(get_frame, t):
+            frame = get_frame(t)
+            factor = factor_func(t)
+            new_size = (int(frame.shape[1] * factor), int(frame.shape[0] * factor))
+            return np.array(Image.fromarray(frame).resize(new_size, Image.Resampling.LANCZOS))
+        return clip.fl(lambda gf, t: resize_frame(gf, t))
+
     image = (
         ImageClip(str(img))
         .set_duration(duration)
         .set_audio(audio)
-        .fx(resize, lambda t: 1 + 0.05 * (t / duration))
+        .fx(custom_resize, lambda t: 1 + 0.05 * (t / duration))
         .fx(fadein, 0.5)
         .fx(fadeout, 0.5)
         .set_position("center")
@@ -110,7 +124,7 @@ def generate_video(row_id: str, caption: str | None = None) -> Path:
         txt = (
             TextClip(
                 caption,
-                font="C:/Windows/Fonts/arial.ttf",
+                font="Arial",  # Using a more generic font name
                 fontsize=48,
                 color="white",
                 bg_color="black",
